@@ -5,6 +5,8 @@ import pandas as pd
 import random
 from datetime import datetime, timedelta
 import warnings
+import csv
+import json
 
 
 def refine_data(dataset):
@@ -64,7 +66,27 @@ def generate_data():
 
     dataset = pd.DataFrame(cleaned_data)
     dataset.to_csv("Crypto.csv", index=False)
-    dataset.to_json("Crypto.json", orient="records")
 
 
-generate_data()
+def csv_to_json(csv_file, json_file):
+    # Open the CSV file for reading with UTF-8 encoding
+    with open(csv_file, 'r', encoding='utf-8') as csv_input:
+        # Read the CSV file
+        csv_reader = csv.DictReader(csv_input)
+        
+        # Initialize an empty list to store the rows
+        data = []
+        
+        # Iterate over each row in the CSV
+        for row in csv_reader:
+            # Append each row as a dictionary to the list
+            data.append(row)
+    
+    # Open the JSON file for writing
+    with open(json_file, 'w') as json_output:
+        # Write the data to the JSON file
+        json.dump(data, json_output, indent=4)
+# generate_data()
+
+
+csv_to_json("Crypto.csv", "Crypto.json")
